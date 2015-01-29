@@ -41,4 +41,21 @@ module.exports.reporter = function() {
 
 		return this.emit('data', file);
 	});
-}
+};
+
+module.exports.fail = function() {
+	return es.through(function(file) {
+		if (file.isNull()) {
+			return this.emit('data', file);
+		}
+
+		if (file.lintspaces && Object.keys(file.lintspaces).length) {
+			console.error(color.red('lintspaces failed'));
+			process.exit(1);
+		} else {
+			console.log(color.magenta('lintspaces failed'))
+		}
+
+		return this.emit('data', file);
+	});
+};
